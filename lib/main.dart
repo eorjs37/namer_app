@@ -40,6 +40,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // 2. MyHomePage는 watch 메서드를 사용하여 앱의 현재 상태에 관한 변경사항을 추적합니다.
     var appState = context.watch<MyAppState>();
+    var pair = appState.current;
 
     // 3.모든 build 메서드는 위젯 또는 중첩된 위젯 트리(좀 더 일반적임)를 반환해야 합니다. 여기서 최상위 위젯은 Scaffold입니다
     return Scaffold(
@@ -49,7 +50,7 @@ class MyHomePage extends StatelessWidget {
           // 5.첫 번째 단계에서 이 Text 위젯을 변경했습니다.
           Text('A random AWESOME idea:'),
           // 6. 이 두 번째 Text 위젯은 appState를 사용하고 해당 클래스의 유일한 멤버인 current(즉, WordPair)에 액세스합니다.
-          Text(appState.current.asUpperCase),
+          BigCard(pair: pair),
 
           // ↓ Add this.
           ElevatedButton(
@@ -58,6 +59,29 @@ class MyHomePage extends StatelessWidget {
               },
               child: Text('Next'))
         ],
+      ),
+    );
+  }
+}
+
+class BigCard extends StatelessWidget {
+  const BigCard({
+    super.key,
+    required this.pair,
+  });
+
+  final WordPair pair;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.displayMedium!
+        .copyWith(color: theme.colorScheme.onPrimary);
+    return Card(
+      color: theme.colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Text(pair.asUpperCase, style: style),
       ),
     );
   }
